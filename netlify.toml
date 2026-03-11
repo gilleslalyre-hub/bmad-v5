@@ -1,0 +1,7 @@
+[build]
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/anthropic"
+  to = "/.netlify/functions/anthropic-proxy"
+  status = 200
