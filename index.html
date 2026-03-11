@@ -363,9 +363,9 @@ body {
   font-size: 10px; font-weight: 600;
   padding: 3px 8px;
   border-radius: 20px;
-  background: var(--john-soft);
-  color: var(--john);
-  border: 1px solid var(--john-mid);
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid var(--accent-mid);
   letter-spacing: .04em;
 }
 
@@ -548,6 +548,40 @@ body {
   color: var(--text3);
 }
 
+/* ── SIDEBAR SEARCH ─────────────────────────────────────────────────── */
+.sidebar-search {
+  padding: 12px 12px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+.search-inner {
+  display: flex; align-items: center; gap: 7px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  padding: 7px 10px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.search-inner:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.search-icon { font-size: 13px; color: var(--text3); flex-shrink: 0; user-select: none; }
+.search-inner input {
+  flex: 1; background: transparent; border: none; outline: none;
+  font-family: 'Geist', sans-serif; font-size: 12px; color: var(--text);
+}
+.search-inner input::placeholder { color: var(--text3); }
+
+/* ── CMD GROUP HEADER ────────────────────────────────────────────────── */
+.cmd-group-header {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 2px; margin-bottom: 4px;
+}
+.cmd-group-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+}
+
 /* ── PANEL (right) ──────────────────────────────────────────────────── */
 .panel {
   background: var(--surface);
@@ -606,27 +640,6 @@ body {
     <div class="logo-mark">⚡</div>
     <div class="logo-text">BMAD Studio</div>
   </div>
-  <div class="phase-nav">
-    <div class="phase-item active" id="phase-mary" onclick="switchAgent('mary')" style="--agent-color:var(--mary)">
-      <div class="phase-num" id="pnum-mary">1</div>Mary
-    </div>
-    <div class="phase-arrow">›</div>
-    <div class="phase-item" id="phase-john" onclick="switchAgent('john')" style="--agent-color:var(--john)">
-      <div class="phase-num" id="pnum-john">2</div>John
-    </div>
-    <div class="phase-arrow">›</div>
-    <div class="phase-item" id="phase-sally" onclick="switchAgent('sally')" style="--agent-color:var(--sally)">
-      <div class="phase-num" id="pnum-sally">3</div>Sally
-    </div>
-    <div class="phase-arrow">›</div>
-    <div class="phase-item" id="phase-winston" onclick="switchAgent('winston')" style="--agent-color:var(--winston)">
-      <div class="phase-num" id="pnum-winston">4</div>Winston
-    </div>
-    <div class="phase-arrow">·</div>
-    <div class="phase-item" id="phase-party" onclick="switchAgent('party')" style="--agent-color:var(--party)">
-      <div class="phase-num" id="pnum-party">🎉</div>Party
-    </div>
-  </div>
   <div class="tb-right">
     <div class="model-badge"><div class="status-dot"></div>claude-sonnet-4</div>
   </div>
@@ -638,62 +651,24 @@ body {
   <!-- LEFT SIDEBAR -->
   <div class="sidebar">
 
-    <!-- Agent header -->
-    <div class="sidebar-agent-header">
-      <div class="agent-row">
-        <div class="agent-avatar" id="hdrAvatar" style="background:var(--mary-soft);border-color:var(--mary-mid)">🗂️</div>
-        <div class="agent-info">
-          <div class="agent-name" id="hdrName">Mary</div>
-          <div class="agent-role" id="hdrDesc">Business Analyst</div>
-        </div>
-        <div class="agent-phase-pill" id="hdrTag">Phase 1</div>
+    <!-- Search -->
+    <div class="sidebar-search">
+      <div class="search-inner">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="cmdSearch" placeholder="Rechercher une commande…" oninput="filterCmds(this.value)" autocomplete="off">
       </div>
     </div>
 
-    <!-- Commands -->
+    <!-- Commands grouped by phase -->
     <div class="cmds-area" id="cmdsList"></div>
-
-    <!-- Agent switcher -->
-    <div class="sidebar-bottom">
-      <div class="sidebar-bottom-title">Agents</div>
-      <button class="agent-mini active" id="btn-mary" onclick="switchAgent('mary')">
-        <div class="agent-mini-emoji" style="background:var(--mary-soft);border-color:var(--mary-mid)">🗂️</div>
-        <span class="agent-mini-name">Mary</span>
-        <span class="agent-mini-check">✓</span>
-        <span class="agent-mini-done" id="ck-mary">✓</span>
-      </button>
-      <button class="agent-mini" id="btn-john" onclick="switchAgent('john')">
-        <div class="agent-mini-emoji" style="background:var(--john-soft);border-color:var(--john-mid)">📋</div>
-        <span class="agent-mini-name">John</span>
-        <span class="agent-mini-check">✓</span>
-        <span class="agent-mini-done" id="ck-john">✓</span>
-      </button>
-      <button class="agent-mini" id="btn-sally" onclick="switchAgent('sally')">
-        <div class="agent-mini-emoji" style="background:var(--sally-soft);border-color:var(--sally-mid)">🎨</div>
-        <span class="agent-mini-name">Sally</span>
-        <span class="agent-mini-check">✓</span>
-        <span class="agent-mini-done" id="ck-sally">✓</span>
-      </button>
-      <button class="agent-mini" id="btn-winston" onclick="switchAgent('winston')">
-        <div class="agent-mini-emoji" style="background:var(--winston-soft);border-color:var(--winston-mid)">🏗️</div>
-        <span class="agent-mini-name">Winston</span>
-        <span class="agent-mini-check">✓</span>
-        <span class="agent-mini-done" id="ck-winston">✓</span>
-      </button>
-      <button class="agent-mini" id="btn-party" onclick="switchAgent('party')">
-        <div class="agent-mini-emoji" style="background:var(--party-soft);border-color:var(--party-mid)">🎉</div>
-        <span class="agent-mini-name">Party Mode</span>
-        <span class="agent-mini-check">✓</span>
-      </button>
-    </div>
   </div>
 
   <!-- CHAT -->
   <div class="chat-area">
     <div class="chat-header">
-      <div class="chat-hdr-avatar" id="hdrAvatar2" style="background:var(--mary-soft)">🗂️</div>
-      <div class="chat-hdr-name" id="hdrName2">Mary</div>
-      <div class="chat-hdr-desc" id="hdrDesc2">Business Analyst · Phase 1</div>
+      <div class="chat-hdr-avatar" id="chatCtxAvatar" style="background:var(--accent-soft)">⚡</div>
+      <div class="chat-hdr-name" id="chatCtxName">BMAD Studio</div>
+      <div class="chat-hdr-desc" id="chatCtxDesc">Assistant produit · Multi-phases</div>
       <div class="chat-hdr-tag">BMAD</div>
     </div>
     <div class="messages" id="messages"></div>
@@ -715,8 +690,7 @@ body {
     <div class="panel-header">
       <div class="panel-title" id="panelTitle">Livrable</div>
       <div class="panel-actions">
-        <button class="panel-btn" id="btnUxImage" onclick="generateUxImage()" style="display:none">🖼️</button>
-        <button class="panel-btn" onclick="copyLivrable()">Copier</button>
+<button class="panel-btn" onclick="copyLivrable()">Copier</button>
         <button class="panel-btn" onclick="exportTxt()">↓ TXT</button>
         <button class="panel-btn" onclick="exportPdf()">↓ PDF</button>
         <button class="panel-btn" onclick="clearLivrable()">✕</button>
@@ -728,607 +702,310 @@ body {
 </div>
 
 <script>
-let API_KEY='PROXY_MANAGED', currentAgent='mary', isLoading=false;
-const AGENTS={
-  mary:{name:'Mary',role:'Business Analyst · Phase 1',tag:'Phase 1',emoji:'🗂️',color:'#2563EB',soft:'#EFF6FF',mid:'#BFDBFE',panelTitle:'Product Brief',placeholder:'Répondez à Mary… ou tapez /bmad pour les commandes',
-    welcomeTitle:'Bonjour, je suis Mary.',welcomeDesc:"Je suis votre Business Analyst. Mon rôle : comprendre le vrai problème avant de modéliser quoi que ce soit. Décrivez votre projet ou secteur, et je vous guiderai.",
-    chips:[{l:'🚀 Lancer la Discovery',t:'Je veux démarrer une phase Discovery sur mon projet.'},{l:'💡 Explorer un problème',t:"Aidez-moi à cadrer un problème produit dans mon secteur."},{l:'/bmad-bmm-create-product-brief',t:'/bmad-bmm-create-product-brief — Lancer la création du Product Brief'},{l:'/bmad-brainstorming',t:'/bmad-brainstorming — Lancer un brainstorming sur le projet'}],
-    system:`Tu es Mary, Business Analyst Senior spécialisée Discovery & Cadrage. Tu travailles avec des équipes produit de tous secteurs (tech, banque, retail, santé, industrie, etc.). Tu t'exprimes uniquement en français.
-
-TON STYLE : directe, incisive, tu creuses jusqu'à la vraie douleur utilisateur. Tu poses UNE seule question à la fois. Tu ne proposes JAMAIS de solutions à ce stade. Tu adaptes ton vocabulaire au secteur décrit.
-
-COMMANDES BMAD que tu connais :
-- /bmad-bmm-create-product-brief → Lancer la création structurée du Product Brief
-- /bmad-brainstorming → Brainstorming ouvert
-- /bmad-help → Liste toutes les commandes disponibles
-
-FLOW DE DISCOVERY (6 questions minimum) :
-1. Quel problème exact rencontrent les utilisateurs ? (douleur concrète)
-2. Qui souffre de ce problème ? (segment précis, fréquence, intensité)
-3. Comment font-ils aujourd'hui ? (workarounds actuels)
-4. Qu'est-ce qui déclencherait le succès ? (définition précise)
-5. Que font les concurrents ou alternatives existantes ?
-6. Pourquoi maintenant ? (catalyseur business ou marché)
-
-LIVRABLE FINAL — après 5-6 échanges OU si l'utilisateur tape /bmad-bmm-create-product-brief :
-
-# Product Brief — [Nom du projet]
-
-## 1. Problème core
-[Description détaillée du problème, avec données chiffrées si disponibles, impact business]
-
-## 2. Utilisateurs cibles
-[Segments précis, personas, fréquence d'usage, niveau de douleur (1-5)]
-
-## 3. Contexte marché
-[Tendances, concurrents, positionnement, opportunité chiffrée si possible]
-
-## 4. Hypothèses clés
-[Liste des 3-5 hypothèses qui doivent être vraies pour que la solution fonctionne]
-
-## 5. Définition du succès
-[Métriques concrètes : taux d'adoption, NPS, temps, revenus — avec cibles chiffrées]
-
-## 6. Contraintes & risques identifiés
-[Contraintes techniques, légales, business connues à ce stade]
-
-## 7. Différenciateur clé
-[Ce qui rend cette approche unique vs l'existant et vs les concurrents]
-
-## 8. Recommandation de priorisation
-[Urgence, impact estimé, effort estimé — score ICE si pertinent]`},
-
-  john:{name:'John',role:'Product Manager · Phase 2',tag:'Phase 2',emoji:'📋',color:'#7C3AED',soft:'#F5F3FF',mid:'#DDD6FE',panelTitle:'PRD — Product Requirements',placeholder:'Répondez à John… ou tapez /bmad pour les commandes',
-    welcomeTitle:'Bonjour, je suis John.',welcomeDesc:"PM Senior. J'ai pris connaissance du Brief de Mary. Mon rôle : transformer la vision en spec actionnable avec de vraies métriques de succès.",
-    chips:[{l:'✅ Valider le contexte',t:'Le contexte du Brief de Mary est correct — confirmes-tu ?'},{l:'🎯 Définir le scope V1',t:"Commençons par définir rigoureusement le périmètre de la V1"},{l:'/bmad-bmm-create-prd',t:'/bmad-bmm-create-prd — Lancer la création du PRD'},{l:'/bmad-brainstorming',t:'/bmad-brainstorming — Brainstorming user stories'}],
-    system:`Tu es John, Product Manager Senior. Tu as lu le Product Brief produit par Mary. Tu travailles sur des projets produit dans tous les secteurs. Tu t'exprimes uniquement en français.
-
-TON STYLE : métrique-obsédé, scope-killer. Tu détestes les specs vagues. Tu valides chaque hypothèse avec des données. Tu poses UNE question à la fois.
-
-COMMANDES BMAD que tu connais :
-- /bmad-bmm-create-prd → Lancer la création structurée du PRD
-- /bmad-brainstorming → Brainstorming user stories
-- /bmad-help → Liste toutes les commandes
-
-FLOW PRD (4-5 questions) :
-1. Validation des objectifs business (OKR rattachés ?)
-2. Scope V1 — qu'est-ce qui est IN vs OUT ?
-3. User stories prioritaires (format : En tant que... je veux... afin de...)
-4. Métriques de succès et méthode de mesure
-5. Dépendances et risques critiques
-
-LIVRABLE FINAL — après 4-5 échanges OU si /bmad-bmm-create-prd :
-
-# PRD — [Nom du projet]
-
-## 1. Contexte & objectifs
-[Rappel du problème, OKR rattachés, horizon temporel]
-
-## 2. Métriques de succès
-| Métrique | Baseline | Cible V1 | Méthode de mesure |
-[tableau complet]
-
-## 3. Périmètre V1
-### In scope
-[Liste précise des fonctionnalités incluses]
-### Out of scope (V2+)
-[Liste précise des fonctionnalités exclues avec justification]
-
-## 4. User Stories (priorisées MoSCoW)
-### Must Have
-[Stories critiques avec critères d'acceptance]
-### Should Have
-[Stories importantes]
-### Could Have
-[Stories optionnelles]
-
-## 5. Critères d'acceptance globaux
-[Conditions nécessaires et suffisantes pour valider la V1]
-
-## 6. Hypothèses & risques
-| Risque | Probabilité | Impact | Mitigation |
-[tableau]
-
-## 7. Jalons & dépendances
-[Planning macro, dépendances techniques et métier]
-
-## 8. Questions ouvertes
-[Décisions encore à prendre avec deadline et owner]`},
-
-  sally:{name:'Sally',role:'UX Designer · Phase 3',tag:'Phase 3',emoji:'🎨',color:'#059669',soft:'#ECFDF5',mid:'#A7F3D0',panelTitle:'Design UX',placeholder:'Répondez à Sally… ou tapez /bmad pour les commandes',
-    welcomeTitle:'Bonjour, je suis Sally.',welcomeDesc:"UX Designer Senior. J'ai lu le Brief et le PRD. Mon rôle : concevoir des parcours utilisateurs clairs, fluides, et adaptés au contexte métier.",
-    chips:[{l:'🗺️ Cartographier le parcours',t:"Commençons par cartographier le parcours utilisateur principal"},{l:'😤 Identifier les frictions',t:"Quelles sont les frictions majeures dans le parcours actuel ?"},{l:'/bmad-bmm-create-ux-design',t:'/bmad-bmm-create-ux-design — Lancer la création du Design UX'},{l:'/bmad-brainstorming',t:'/bmad-brainstorming — Brainstorming parcours UX'}],
-    system:`Tu es Sally, UX Designer Senior spécialisée en conception de produits numériques. Tu as lu le Brief et le PRD. Tu travailles sur des projets de tous secteurs. Tu t'exprimes uniquement en français.
-
-TON STYLE : empathique, visuelle, orientée utilisateur. Tu cartographies avant de concevoir. Tu exiges des données comportementales. Tu poses UNE question à la fois.
-
-COMMANDES BMAD que tu connais :
-- /bmad-bmm-create-ux-design → Lancer la création structurée du Design UX
-- /bmad-brainstorming → Brainstorming parcours
-- /bmad-help → Liste toutes les commandes
-
-FLOW UX (4-5 questions) :
-1. Quel est le moment clé du parcours à améliorer ?
-2. Quelles sont les frictions actuelles les plus douloureuses ?
-3. Quel device / contexte d'usage principal (mobile, desktop, terrain...) ?
-4. Quelles contraintes design (brand, accessibilité, contraintes légales) ?
-5. Quels patterns UX existent déjà dans le produit ?
-
-LIVRABLE FINAL — après 4-5 échanges OU si /bmad-bmm-create-ux-design :
-
-# Design UX — [Nom du projet]
-
-## 1. Personas & contextes d'usage
-[2-3 personas avec contexte d'usage, device, niveau de maturité digitale]
-
-## 2. Parcours AS-IS (état actuel)
-[Schéma ASCII ou étapes numérotées du parcours actuel avec frictions]
-
-## 3. Frictions identifiées
-[Liste priorisée des points de friction avec impact utilisateur]
-
-## 4. Parcours TO-BE (cible)
-
-SCHÉMA ASCII DU PARCOURS TO-BE :
-[Dessin ASCII du nouveau parcours avec étapes clés]
-
-## 5. Principes de design
-[3-5 principes directeurs pour ce projet]
-
-## 6. Composants & patterns UX
-[Liste des patterns UI à utiliser, justification]
-
-## 7. Cas limites & états d'erreur
-[Gestion des erreurs, états vides, cas dégradés]
-
-## 8. Métriques UX de succès
-[Task completion rate, time on task, error rate, satisfaction score]`},
-
-  winston:{name:'Winston',role:'Architecte · Phase 4',tag:'Phase 4',emoji:'🏗️',color:'#D97706',soft:'#FFFBEB',mid:'#FDE68A',panelTitle:'Architecture Technique',placeholder:'Répondez à Winston… ou tapez /bmad pour les commandes',
-    welcomeTitle:'Bonjour, je suis Winston.',welcomeDesc:"Architecte Technique Senior. J'ai lu tous les livrables précédents. Mon rôle : concevoir une architecture robuste, scalable et cohérente avec les contraintes métier.",
-    chips:[{l:'🏗️ Choisir le stack',t:"Commençons par valider le stack technique envisagé"},{l:'⚡ Contraintes perf',t:"Quelles sont les contraintes de performance et de scalabilité ?"},{l:'/bmad-bmm-create-architecture',t:"/bmad-bmm-create-architecture — Lancer la création de l'Architecture"},{l:'/bmad-brainstorming',t:'/bmad-brainstorming — Brainstorming architecture'}],
-    system:`Tu es Winston, Architecte Technique Senior. Tu as lu le Brief, le PRD et le Design UX. Tu travailles sur des projets de tous secteurs et tous stacks. Tu t'exprimes uniquement en français.
-
-TON STYLE : pragmatique, exhaustif, trade-off obsédé. Tu documentes chaque décision architecture avec ses justifications. Tu poses UNE question à la fois.
-
-COMMANDES BMAD que tu connais :
-- /bmad-bmm-create-architecture → Lancer la création structurée de l'Architecture
-- /bmad-brainstorming → Brainstorming architecture
-- /bmad-help → Liste toutes les commandes
-
-FLOW ARCHITECTURE (4-5 questions) :
-1. Quel est le stack technique actuel / existant ?
-2. Quelles sont les contraintes de performance (latence, charge) ?
-3. Quelles contraintes de sécurité et conformité (RGPD, ISO, sectorielles) ?
-4. Budget infra et contraintes cloud / on-premise ?
-5. Niveau de maturité DevOps de l'équipe ?
-
-LIVRABLE FINAL — après 4-5 échanges OU si /bmad-bmm-create-architecture :
-
-# Architecture Technique — [Nom du projet]
-
-## 1. Vue d'ensemble
-[Résumé de l'approche architecturale, principes directeurs]
-
-## 2. Schéma d'architecture
-
-SCHÉMA ASCII :
-[Dessin ASCII de l'architecture avec composants et flux]
-
-## 3. Stack technique
-[Frontend, Backend, BDD, Infra, CI/CD — avec justifications]
-
-## 4. ADR — Architecture Decision Records
-[3-5 décisions clés avec contexte, options considérées, décision retenue, conséquences]
-
-## 5. Composants & services
-[Description de chaque composant, responsabilités, interfaces]
-
-## 6. NFR — Non-Functional Requirements
-[Performance, disponibilité, sécurité, scalabilité — avec cibles chiffrées]
-
-## 7. Sécurité & conformité
-[Modèle de sécurité, conformité RGPD/ISO/sectorielle, gestion des secrets]
-
-## 8. Plan de migration / déploiement
-[Étapes de mise en production, stratégie de rollback, monitoring]
-
-## 9. Estimations de coûts infra
-[Coûts mensuels estimés par service, optimisations possibles]
-
-## 10. Risques techniques
-[Risques identifiés, mitigation, plan B]`},
-
-  party:{name:'Party Mode',role:'Débat Multi-Agents · 🎉',tag:'🎉',emoji:'🎉',color:'#E8430A',soft:'#FEF3EF',mid:'#FDDBC9',panelTitle:'Synthèse Multi-Agents',placeholder:'Proposez un sujet de débat ou tapez /bmad-party-mode…',
-    welcomeTitle:'Bienvenue en Party Mode !',welcomeDesc:"Tous les agents débattent simultanément. Chacun argumente depuis son angle : Discovery, PM, UX, Architecture. Une synthèse finale tranche.",
-    chips:[{l:'🎉 Lancer le débat',t:'/bmad-party-mode — Lancer le débat contradictoire sur ce projet'},{l:'🤔 Challenger les choix',t:'Challengez les décisions prises dans les phases précédentes'},{l:'🔮 Explorer des alternatives',t:'Quelles alternatives aurions-nous pu choisir ?'},{l:'/bmad-brainstorming',t:'/bmad-brainstorming — Brainstorming collectif tous agents'}],
-    system:`Tu es BMAD Party Mode : tu joues simultanément 4 agents en débat contradictoire sur un sujet de design produit. Tu t'exprimes uniquement en français.
-
-Format STRICT — utilise EXACTEMENT ces marqueurs :
-
-[MARY — Business Analyst]
-(Perspective Discovery & utilisateur)
-
-[JOHN — Product Manager]
-(Perspective métriques & scope)
-
-[SALLY — UX Designer]
-(Perspective parcours & expérience)
-
-[WINSTON — Architecte]
-(Perspective technique & faisabilité)
-
-[SYNTHÈSE]
-(Conclusion tranchée qui réconcilie les 4 perspectives)
-
-Chaque agent argumente avec conviction depuis son angle. Les désaccords sont explicites et documentés. La synthèse propose une décision claire avec justification.`}
-};
-const conversations={mary:[],john:[],sally:[],winston:[],party:[]};
-const livrables={mary:'',john:'',sally:'',winston:'',party:''};
-const agentDone={mary:false,john:false,sally:false,winston:false,party:false};
-
-// ── COMMAND REGISTRY ──────────────────────────────────────────────────
-const BMAD_ALL_CMDS=[
-  {cmd:'/bmad-bmm-create-product-brief',icon:'📋',label:'Créer Product Brief',  desc:'Lance la création structurée du Product Brief',agents:['mary']},
-  {cmd:'/bmad-bmm-create-prd',          icon:'📄',label:'Créer PRD',             desc:'Génère le Product Requirements Document complet',agents:['john']},
-  {cmd:'/bmad-bmm-create-ux-design',    icon:'🎨',label:'Créer UX Design',       desc:'Lance la création du parcours UX complet',agents:['sally']},
-  {cmd:'/bmad-bmm-create-architecture', icon:'🏗️',label:'Créer Architecture',    desc:"Génère l'architecture technique complète",agents:['winston']},
-  {cmd:'/bmad-brainstorming',           icon:'💡',label:'Brainstorming',          desc:'Brainstorming ouvert sur le projet',agents:['mary','john','sally','winston','party']},
-  {cmd:'/bmad-party-mode',             icon:'🎉',label:'Party Mode',             desc:'Débat contradictoire multi-agents',agents:['party','mary','john','sally','winston']},
-  {cmd:'/bmad-bmm-review',             icon:'🔍',label:'Réviser le livrable',   desc:'Critique et améliore le dernier livrable',agents:['mary','john','sally','winston']},
-  {cmd:'/bmad-checklist',              icon:'✅',label:'Checklist validation',   desc:'Vérifie la complétude du livrable',agents:['mary','john','sally','winston']},
-  {cmd:'/bmad-status',                 icon:'📊',label:'Statut du projet',       desc:'Résumé de toutes les phases',agents:['mary','john','sally','winston','party']},
-  {cmd:'/bmad-help',                   icon:'❓',label:'Aide BMAD',              desc:'Liste toutes les commandes disponibles',agents:['mary','john','sally','winston','party']},
+let isLoading = false;
+let conversation = [];
+const livrables = { brief:'', prd:'', ux:'', architecture:'', last:'' };
+
+// ── SYSTEM PROMPT UNIFIÉ ──────────────────────────────────────────────
+const SYSTEM_PROMPT = `Tu es BMAD Studio — un assistant produit expert en méthode agile AI-driven. Tu t'exprimes uniquement en français. Tu maîtrises tous les rôles du cycle produit.
+
+COMMANDES BMAD — adopte le persona et le flow correspondant :
+
+/bmad-bmm-create-product-brief → [Mary — Business Analyst Senior] Flow Discovery (6 questions min, UNE à la fois). Livrable final : # Product Brief avec sections Problème core, Utilisateurs cibles, Contexte marché, Hypothèses clés, Définition du succès, Contraintes & risques, Différenciateur clé, Recommandation de priorisation.
+
+/bmad-bmm-create-prd → [John — Product Manager Senior] Flow PRD (4-5 questions). Livrable final : # PRD avec sections Contexte & objectifs, Métriques de succès (tableau), Périmètre V1 (In/Out scope), User Stories MoSCoW avec critères d'acceptance, Hypothèses & risques (tableau), Jalons & dépendances, Questions ouvertes.
+
+/bmad-bmm-create-ux-design → [Sally — UX Designer Senior] Flow UX (4-5 questions). Livrable final : # Design UX avec sections Personas & contextes d'usage, Parcours AS-IS avec frictions, Parcours TO-BE (schéma ASCII), Principes de design, Composants & patterns UX, Cas limites & erreurs, Métriques UX de succès.
+
+/bmad-bmm-create-architecture → [Winston — Architecte Technique Senior] Flow architecture (4-5 questions). Livrable final : # Architecture Technique avec sections Vue d'ensemble, Schéma ASCII, Stack technique justifié, ADR (Architecture Decision Records), NFR, Sécurité & conformité, Plan de déploiement, Estimations de coûts infra, Risques techniques.
+
+/bmad-brainstorming → Mode brainstorming ouvert : explore en profondeur, génère des idées, challenge les hypothèses, propose des alternatives créatives.
+
+/bmad-party-mode → Débat contradictoire avec marqueurs [MARY — Business Analyst], [JOHN — Product Manager], [SALLY — UX Designer], [WINSTON — Architecte], puis [SYNTHÈSE] avec décision claire.
+
+/bmad-bmm-review → Analyse critique du dernier livrable : lacunes, incohérences, risques non couverts, améliorations concrètes.
+
+/bmad-checklist → Vérifie la complétude selon les standards BMAD. Score /10 avec items validés/à améliorer.
+
+/bmad-status → Résume l'avancement : livrables produits, qualité, prochaines étapes recommandées.
+
+/bmad-help → Liste toutes les commandes avec descriptions, organisées par phase.
+
+RÈGLES : UNE seule question à la fois dans les flows. Les livrables commencent par # (titre markdown). Style adapté au secteur de l'utilisateur.`;
+
+// ── GROUPES DE COMMANDES ──────────────────────────────────────────────
+const CMD_GROUPS = [
+  {
+    id: 'discovery', label: 'Discovery', color: '#2563EB', soft: '#EFF6FF', mid: '#BFDBFE',
+    commands: [
+      {cmd:'/bmad-bmm-create-product-brief', icon:'📋', label:'Product Brief',    desc:'Créer un brief structuré complet'},
+      {cmd:'/bmad-brainstorming',            icon:'💡', label:'Brainstorming',    desc:'Explorer le problème en profondeur'},
+    ]
+  },
+  {
+    id: 'planning', label: 'Planning', color: '#7C3AED', soft: '#F5F3FF', mid: '#DDD6FE',
+    commands: [
+      {cmd:'/bmad-bmm-create-prd',           icon:'📄', label:'PRD',              desc:'Product Requirements Document complet'},
+    ]
+  },
+  {
+    id: 'design', label: 'UX Design', color: '#059669', soft: '#ECFDF5', mid: '#A7F3D0',
+    commands: [
+      {cmd:'/bmad-bmm-create-ux-design',     icon:'🎨', label:'Design UX',        desc:'Parcours utilisateurs & interfaces'},
+    ]
+  },
+  {
+    id: 'architecture', label: 'Architecture', color: '#D97706', soft: '#FFFBEB', mid: '#FDE68A',
+    commands: [
+      {cmd:'/bmad-bmm-create-architecture',  icon:'🏗️', label:'Architecture Tech.', desc:'Architecture système complète'},
+    ]
+  },
+  {
+    id: 'utilities', label: 'Utilitaires', color: '#64748B', soft: '#F8FAFC', mid: '#CBD5E1',
+    commands: [
+      {cmd:'/bmad-party-mode',               icon:'🎉', label:'Party Mode',       desc:'Débat contradictoire multi-agents'},
+      {cmd:'/bmad-bmm-review',               icon:'🔍', label:'Réviser',          desc:'Critique et améliore le livrable'},
+      {cmd:'/bmad-checklist',                icon:'✅', label:'Checklist',         desc:'Valider la complétude'},
+      {cmd:'/bmad-status',                   icon:'📊', label:'Statut projet',    desc:'Résumé de toutes les phases'},
+      {cmd:'/bmad-help',                     icon:'❓', label:'Aide BMAD',        desc:'Toutes les commandes disponibles'},
+    ]
+  }
 ];
 
-const AGENT_CMDS={
-  mary:[
-    {cmd:'/bmad-bmm-create-product-brief',icon:'📋',label:'Créer le Product Brief',desc:'Génère le Brief structuré complet'},
-    {cmd:'/bmad-brainstorming',           icon:'💡',label:'Brainstorming Discovery',desc:'Explorer le problème en profondeur'},
-    {cmd:'/bmad-bmm-review',             icon:'🔍',label:'Réviser le Brief',       desc:'Critique et améliore le Brief'},
-    {cmd:'/bmad-checklist',              icon:'✅',label:'Valider le Brief',        desc:'Checklist de complétude'},
-    {cmd:'/bmad-help',                   icon:'❓',label:'Aide & commandes',        desc:'Toutes les commandes disponibles'},
-  ],
-  john:[
-    {cmd:'/bmad-bmm-create-prd',         icon:'📄',label:'Créer le PRD',           desc:'Génère le PRD complet avec métriques'},
-    {cmd:'/bmad-brainstorming',          icon:'💡',label:'Brainstorming Stories',   desc:'Explorer les user stories'},
-    {cmd:'/bmad-bmm-review',            icon:'🔍',label:'Réviser le PRD',          desc:'Critique et améliore le PRD'},
-    {cmd:'/bmad-checklist',             icon:'✅',label:'Valider le PRD',           desc:'Checklist de complétude PRD'},
-    {cmd:'/bmad-help',                  icon:'❓',label:'Aide & commandes',         desc:'Toutes les commandes disponibles'},
-  ],
-  sally:[
-    {cmd:'/bmad-bmm-create-ux-design',  icon:'🎨',label:'Créer le Design UX',      desc:'Génère le parcours UX complet'},
-    {cmd:'/bmad-brainstorming',         icon:'💡',label:'Brainstorming UX',         desc:'Explorer les parcours et frictions'},
-    {cmd:'/bmad-bmm-review',           icon:'🔍',label:'Réviser le Design',        desc:'Critique et améliore le design UX'},
-    {cmd:'/bmad-checklist',            icon:'✅',label:'Valider le Design',         desc:'Checklist UX'},
-    {cmd:'/bmad-help',                 icon:'❓',label:'Aide & commandes',          desc:'Toutes les commandes disponibles'},
-  ],
-  winston:[
-    {cmd:'/bmad-bmm-create-architecture',icon:'🏗️',label:"Créer l'Architecture",   desc:"Génère l'archi technique complète"},
-    {cmd:'/bmad-brainstorming',          icon:'💡',label:'Brainstorming Technique', desc:"Explorer les choix d'architecture"},
-    {cmd:'/bmad-bmm-review',            icon:'🔍',label:"Réviser l'Architecture",  desc:"Critique et améliore l'archi"},
-    {cmd:'/bmad-checklist',             icon:'✅',label:"Valider l'Architecture",   desc:'Checklist archi complète'},
-    {cmd:'/bmad-help',                  icon:'❓',label:'Aide & commandes',         desc:'Toutes les commandes disponibles'},
-  ],
-  party:[
-    {cmd:'/bmad-party-mode',            icon:'🎉',label:'Lancer le Party Mode',    desc:'Débat contradictoire 4 agents'},
-    {cmd:'/bmad-brainstorming',         icon:'💡',label:'Brainstorming collectif', desc:'Tous les agents brainstorment'},
-    {cmd:'/bmad-status',               icon:'📊',label:'Statut du projet',        desc:'Résumé toutes les phases'},
-    {cmd:'/bmad-help',                 icon:'❓',label:'Aide & commandes',         desc:'Toutes les commandes disponibles'},
-  ],
-};
+const ALL_CMDS = CMD_GROUPS.flatMap(g => g.commands);
 
-// Agent accent colors for CSS vars
-const AGENT_ACCENTS={
-  mary: {accent:'var(--mary)',soft:'var(--mary-soft)',bg:'var(--mary-soft)',border:'var(--mary-mid)'},
-  john: {accent:'var(--john)',soft:'var(--john-soft)',bg:'var(--john-soft)',border:'var(--john-mid)'},
-  sally:{accent:'var(--sally)',soft:'var(--sally-soft)',bg:'var(--sally-soft)',border:'var(--sally-mid)'},
-  winston:{accent:'var(--winston)',soft:'var(--winston-soft)',bg:'var(--winston-soft)',border:'var(--winston-mid)'},
-  party:{accent:'var(--party)',soft:'var(--party-soft)',bg:'var(--party-soft)',border:'var(--party-mid)'},
-};
+// ── AUTOCOMPLETE ──────────────────────────────────────────────────────
+let acIndex = -1, acFiltered = [];
 
-// ── AUTOCOMPLETE STATE ────────────────────────────────────────────────
-let acIndex=-1, acFiltered=[];
-
-function handleAutocomplete(val){
-  const ac=document.getElementById('autocomplete');
-  if(!val.startsWith('/')){ac.classList.remove('show');return;}
-  const q=val.toLowerCase();
-  acFiltered=BMAD_ALL_CMDS.filter(c=>c.cmd.startsWith(q)||c.label.toLowerCase().includes(q.slice(1)));
-  if(!acFiltered.length){ac.classList.remove('show');return;}
-  acIndex=-1;
-  let html='<div class="ac-header">Commandes BMAD</div>';
-  acFiltered.forEach((c,i)=>{
-    const rel=c.agents.includes(currentAgent);
-    html+=`<div class="ac-item${rel?' sel':''}" data-i="${i}" onclick="pickAc(${i})">
+function handleAutocomplete(val) {
+  const ac = document.getElementById('autocomplete');
+  if (!val.startsWith('/')) { ac.classList.remove('show'); return; }
+  const q = val.toLowerCase();
+  acFiltered = ALL_CMDS.filter(c => c.cmd.startsWith(q) || c.label.toLowerCase().includes(q.slice(1)));
+  if (!acFiltered.length) { ac.classList.remove('show'); return; }
+  acIndex = -1;
+  let html = '<div class="ac-header">Commandes BMAD</div>';
+  acFiltered.forEach((c, i) => {
+    html += `<div class="ac-item" data-i="${i}" onclick="pickAc(${i})">
       <span>${c.icon}</span>
       <span class="ac-cmd">${c.cmd}</span>
       <span class="ac-desc">${c.desc}</span>
-      ${rel?`<span class="ac-tag">${AGENTS[currentAgent].name}</span>`:''}
     </div>`;
   });
-  ac.innerHTML=html;
+  ac.innerHTML = html;
   ac.classList.add('show');
 }
 
-function pickAc(i){
-  if(acFiltered[i]){
-    document.getElementById('userInput').value=acFiltered[i].cmd;
+function pickAc(i) {
+  if (acFiltered[i]) {
+    document.getElementById('userInput').value = acFiltered[i].cmd;
     document.getElementById('autocomplete').classList.remove('show');
     document.getElementById('userInput').focus();
   }
 }
 
-function toggleSlashMenu(){
-  const inp=document.getElementById('userInput');
-  if(!inp.value.startsWith('/')) inp.value='/';
+function toggleSlashMenu() {
+  const inp = document.getElementById('userInput');
+  if (!inp.value.startsWith('/')) inp.value = '/';
   handleAutocomplete(inp.value);
   inp.focus();
 }
 
-function handleAcKey(e){
-  const ac=document.getElementById('autocomplete');
-  if(!ac.classList.contains('show')) return false;
-  const items=ac.querySelectorAll('.ac-item');
-  if(e.key==='ArrowDown'){e.preventDefault();acIndex=Math.min(acIndex+1,items.length-1);items.forEach((el,i)=>el.classList.toggle('sel',i===acIndex));return true;}
-  if(e.key==='ArrowUp'){e.preventDefault();acIndex=Math.max(acIndex-1,-1);items.forEach((el,i)=>el.classList.toggle('sel',i===acIndex));return true;}
-  if(e.key==='Tab'||e.key==='Enter'){e.preventDefault();pickAc(acIndex>=0?acIndex:0);if(e.key==='Enter')sendMessage();return true;}
-  if(e.key==='Escape'){ac.classList.remove('show');return true;}
+function handleAcKey(e) {
+  const ac = document.getElementById('autocomplete');
+  if (!ac.classList.contains('show')) return false;
+  const items = ac.querySelectorAll('.ac-item');
+  if (e.key === 'ArrowDown') { e.preventDefault(); acIndex = Math.min(acIndex+1, items.length-1); items.forEach((el,i) => el.classList.toggle('sel', i===acIndex)); return true; }
+  if (e.key === 'ArrowUp')   { e.preventDefault(); acIndex = Math.max(acIndex-1, -1); items.forEach((el,i) => el.classList.toggle('sel', i===acIndex)); return true; }
+  if (e.key === 'Tab' || e.key === 'Enter') { e.preventDefault(); pickAc(acIndex>=0?acIndex:0); if(e.key==='Enter') sendMessage(); return true; }
+  if (e.key === 'Escape') { ac.classList.remove('show'); return true; }
   return false;
 }
 
-// ── RENDER SIDEBAR COMMANDS ───────────────────────────────────────────
-function renderCmds(){
-  const a=AGENTS[currentAgent];
-  const acc=AGENT_ACCENTS[currentAgent];
-  const cmds=AGENT_CMDS[currentAgent]||[];
-  const el=document.getElementById('cmdsList');
-  let h='<div class="cmd-section"><div class="cmd-section-title">Commandes de phase</div>';
-  cmds.forEach((c,i)=>{
-    const isPrimary=i===0;
-    h+=`<button class="cmd-btn${isPrimary?' primary-cmd':''}"
-      style="${isPrimary?`--agent-bg:${acc.bg};--agent-border:${acc.border}`:''}
-      onclick="sendQuick('${c.cmd}')">
-      <span class="cmd-icon">${c.icon}</span>
-      <span class="cmd-body">
-        <span class="cmd-label">${c.label}</span>
-        <span class="cmd-slash">${c.cmd}</span>
-      </span>
-    </button>`;
-    if(i===0) h+='</div><div class="cmd-sep"></div><div class="cmd-section"><div class="cmd-section-title">Autres actions</div>';
+// ── RENDER SIDEBAR ────────────────────────────────────────────────────
+function renderCmds(filter) {
+  const q = (filter || '').toLowerCase();
+  const el = document.getElementById('cmdsList');
+  let h = '';
+  CMD_GROUPS.forEach(group => {
+    const cmds = q
+      ? group.commands.filter(c => c.label.toLowerCase().includes(q) || c.cmd.includes(q) || c.desc.toLowerCase().includes(q))
+      : group.commands;
+    if (!cmds.length) return;
+    h += `<div class="cmd-section">
+      <div class="cmd-group-header">
+        <span class="cmd-group-dot" style="background:${group.color}"></span>
+        <span class="cmd-section-title">${group.label}</span>
+      </div>`;
+    cmds.forEach(c => {
+      h += `<button class="cmd-btn" onclick="sendQuick('${c.cmd}')">
+        <span class="cmd-icon">${c.icon}</span>
+        <span class="cmd-body">
+          <span class="cmd-label">${c.label}</span>
+          <span class="cmd-slash">${c.cmd}</span>
+        </span>
+      </button>`;
+    });
+    h += '</div>';
   });
-  h+='</div><div class="cmd-sep"></div><div class="cmd-section"><div class="cmd-section-title">Toutes les commandes BMAD</div>';
-  BMAD_ALL_CMDS.forEach(c=>{
-    const rel=c.agents.includes(currentAgent);
-    h+=`<button class="cmd-btn${rel?'':' dim'}" onclick="sendQuick('${c.cmd}')">
-      <span class="cmd-icon">${c.icon}</span>
-      <span class="cmd-body">
-        <span class="cmd-label" style="${rel?'':'color:var(--text3)'}">${c.label}</span>
-        <span class="cmd-slash">${c.cmd}</span>
-      </span>
-    </button>`;
-  });
-  h+='</div>';
-  el.innerHTML=h;
+  el.innerHTML = h || '<div style="padding:20px 16px;color:var(--text3);font-size:12px;text-align:center">Aucune commande trouvée</div>';
 }
 
-// ── SWITCH AGENT ──────────────────────────────────────────────────────
-function switchAgent(id){
-  currentAgent=id;
-  const a=AGENTS[id];
-  const acc=AGENT_ACCENTS[id];
-  // Topbar
-  document.querySelectorAll('.phase-item').forEach(el=>el.classList.remove('active'));
-  const pi=document.getElementById('phase-'+id); if(pi) pi.classList.add('active');
-  // Sidebar header
-  const av=document.getElementById('hdrAvatar');
-  if(av){av.textContent=a.emoji;av.style.background=acc.bg;av.style.borderColor=acc.border;}
-  document.getElementById('hdrName').textContent=a.name;
-  document.getElementById('hdrDesc').textContent=a.role.split('·')[0].trim();
-  document.getElementById('hdrTag').textContent=a.tag;
-  // Chat header
-  const av2=document.getElementById('hdrAvatar2');
-  if(av2){av2.textContent=a.emoji;av2.style.background=acc.bg;}
-  document.getElementById('hdrName2').textContent=a.name;
-  document.getElementById('hdrDesc2').textContent=a.role;
-  // Input accent
-  const root=document.documentElement;
-  if(root&&root.style){root.style.setProperty('--agent-accent',a.color);root.style.setProperty('--agent-accent-soft',`var(--${id}-soft)`);
-}
-  const sb=document.getElementById('sendBtn');if(sb) sb.style.background=a.color;
-  // Agent mini list
-  document.querySelectorAll('.agent-mini').forEach(el=>el.classList.remove('active'));
-  const mb=document.getElementById('btn-'+id); if(mb) mb.classList.add('active');
-  // Render
-  renderCmds();
-  renderMessages();
-  renderPanel();
-}
-
-// ── GETACTIVESYSTEM ───────────────────────────────────────────────────
-function getActiveSystem(id){
-  const base=AGENTS[id].system;
-  const phases=['mary','john','sally','winston'];
-  const myIdx=phases.indexOf(id);
-  const prev=phases.slice(0,myIdx).filter(p=>livrables[p])
-    .map(p=>`\n\n--- LIVRABLE ${AGENTS[p].name.toUpperCase()} ---\n${livrables[p]}`).join('');
-  if(!prev) return base;
-  return base+`\n\n══════════════════\nCONTEXTE DES PHASES PRÉCÉDENTES\n══════════════════${prev}`;
-}
+function filterCmds(val) { renderCmds(val); }
 
 // ── MESSAGES ──────────────────────────────────────────────────────────
-function renderMessages(){
-  const msgs=document.getElementById('messages');
-  const a=AGENTS[currentAgent];
-  if(!msgs) return;
-  if(conversations[currentAgent].length===0){
-    const chips=a.chips.map(c=>`<div class="chip" onclick="sendQuick('${c.t.replace(/'/g,"&#39;")}')">${c.l}</div>`).join('');
-    msgs.innerHTML=`<div class="welcome">
-      <div class="welcome-avatar" style="background:${a.soft};border-color:${a.mid}">${a.emoji}</div>
-      <h2>${a.welcomeTitle}</h2>
-      <p>${a.welcomeDesc}</p>
-      <div class="chips">${chips}</div>
+function renderMessages() {
+  const msgs = document.getElementById('messages');
+  if (!msgs) return;
+  if (conversation.length === 0) {
+    msgs.innerHTML = `<div class="welcome">
+      <div class="welcome-avatar" style="background:var(--accent-soft);border-color:var(--accent-mid)">⚡</div>
+      <h2>BMAD Studio</h2>
+      <p>Sélectionnez une commande dans le panel gauche ou tapez <code style="font-family:'Geist Mono',monospace;background:var(--surface2);padding:1px 5px;border-radius:3px;border:1px solid var(--border2)">/bmad</code> pour commencer.</p>
+      <div class="chips">
+        <div class="chip" onclick="sendQuick('/bmad-bmm-create-product-brief')">📋 Product Brief</div>
+        <div class="chip" onclick="sendQuick('/bmad-brainstorming')">💡 Brainstorming</div>
+        <div class="chip" onclick="sendQuick('/bmad-bmm-create-prd')">📄 PRD</div>
+        <div class="chip" onclick="sendQuick('/bmad-party-mode')">🎉 Party Mode</div>
+      </div>
     </div>`;
     return;
   }
-  msgs.innerHTML='';
-  conversations[currentAgent].forEach(m=>{
-    msgs.appendChild(m.role==='user'?makeUserMsg(m.content):makeAgentMsg(m.content));
+  msgs.innerHTML = '';
+  conversation.forEach(m => {
+    msgs.appendChild(m.role === 'user' ? makeUserMsg(m.content) : makeAgentMsg(m.content));
   });
-  msgs.scrollTop=msgs.scrollHeight;
+  msgs.scrollTop = msgs.scrollHeight;
 }
 
-function makeUserMsg(text){
-  const d=document.createElement('div');
-  d.className='msg user';
-  d.innerHTML=`<div class="msg-avatar">👤</div>
+function makeUserMsg(text) {
+  const d = document.createElement('div');
+  d.className = 'msg user';
+  d.innerHTML = `<div class="msg-avatar">👤</div>
     <div class="msg-body"><div class="msg-name">Vous</div><div class="msg-text">${esc(text)}</div></div>`;
   return d;
 }
 
-function makeAgentMsg(text){
-  const a=AGENTS[currentAgent];
-  const d=document.createElement('div');
-  d.className='msg agent';
-  d.innerHTML=`<div class="msg-avatar" style="background:${a.soft};border-color:${a.mid}">${a.emoji}</div>
-    <div class="msg-body"><div class="msg-name">${a.name}</div><div class="msg-text">${fmt(text)}</div></div>`;
+function makeAgentMsg(text) {
+  const d = document.createElement('div');
+  d.className = 'msg agent';
+  d.innerHTML = `<div class="msg-avatar" style="background:var(--accent-soft);border-color:var(--accent-mid)">⚡</div>
+    <div class="msg-body"><div class="msg-name">BMAD Studio</div><div class="msg-text">${fmt(text)}</div></div>`;
   return d;
 }
 
-function renderPanel(){
-  const panel=document.getElementById('panelContent');
-  const a=AGENTS[currentAgent];
-  const content=livrables[currentAgent];
-  document.getElementById('panelTitle').textContent=a.panelTitle||'Livrable';
-  const uxBtn=document.getElementById('btnUxImage');
-  if(uxBtn) uxBtn.style.display=(currentAgent==='sally'&&content)?'':'none';
-  if(!content){
-    panel.innerHTML='<div class="panel-empty"><div class="panel-empty-icon">📄</div><div class="panel-empty-title">Aucun livrable</div><div class="panel-empty-desc">Le livrable généré apparaîtra ici automatiquement.</div></div>';
+function renderPanel() {
+  const panel = document.getElementById('panelContent');
+  const content = livrables.last;
+  document.getElementById('panelTitle').textContent = 'Livrable';
+  if (!content) {
+    panel.innerHTML = '<div class="panel-empty"><div class="panel-empty-icon">📄</div><div class="panel-empty-title">Aucun livrable</div><div class="panel-empty-desc">Le livrable généré apparaîtra ici automatiquement.</div></div>';
     return;
   }
-  let html='';
-  content.split('\n').forEach(line=>{
-    if(line.startsWith('# '))       html+=`<div class="lv-h1">${esc(line.slice(2))}</div>`;
-    else if(line.startsWith('## ')) html+=`<div class="lv-h2">${esc(line.slice(3))}</div>`;
-    else if(line.startsWith('- ')||line.startsWith('• ')) html+=`<div class="lv-bullet">${esc(line.slice(2))}</div>`;
-    else if(line.trim()) html+=`<div class="lv-p">${esc(line)}</div>`;
-    else html+='<div style="height:6px"></div>';
+  let html = '';
+  content.split('\n').forEach(line => {
+    if (line.startsWith('# '))        html += `<div class="lv-h1">${esc(line.slice(2))}</div>`;
+    else if (line.startsWith('## '))  html += `<div class="lv-h2">${esc(line.slice(3))}</div>`;
+    else if (line.startsWith('- ') || line.startsWith('• ')) html += `<div class="lv-bullet">${esc(line.slice(2))}</div>`;
+    else if (line.trim())             html += `<div class="lv-p">${esc(line)}</div>`;
+    else html += '<div style="height:6px"></div>';
   });
-  panel.innerHTML=html;
+  panel.innerHTML = html;
 }
 
 // ── INPUT ─────────────────────────────────────────────────────────────
-function handleKey(e){
-  if(handleAcKey(e)) return;
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();}
+function handleKey(e) {
+  if (handleAcKey(e)) return;
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
 }
-function autoResize(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,160)+'px';}
-
-function sendQuick(text){
+function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 160) + 'px'; }
+function sendQuick(text) {
   document.getElementById('autocomplete').classList.remove('show');
-  document.getElementById('userInput').value=text;
+  document.getElementById('userInput').value = text;
   sendMessage();
 }
 
 // ── SEND ──────────────────────────────────────────────────────────────
-async function sendMessage(){
-  const inp=document.getElementById('userInput');
-  const text=inp.value.trim();
-  if(!text||isLoading) return;
-  inp.value=''; inp.style.height='auto';
+async function sendMessage() {
+  const inp = document.getElementById('userInput');
+  const text = inp.value.trim();
+  if (!text || isLoading) return;
+  inp.value = ''; inp.style.height = 'auto';
   document.getElementById('autocomplete').classList.remove('show');
-  // API key managed by Netlify proxy
-  conversations[currentAgent].push({role:'user',content:text});
+  conversation.push({ role: 'user', content: text });
   renderMessages();
-  isLoading=true;
-  document.getElementById('sendBtn').disabled=true;
-  // Typing indicator
-  const msgs=document.getElementById('messages');
-  const a=AGENTS[currentAgent];
-  const typingEl=document.createElement('div');
-  typingEl.className='typing-row';
-  typingEl.innerHTML=`<div class="msg-avatar" style="background:${a.soft};border-color:${a.mid}">${a.emoji}</div>
+  isLoading = true;
+  document.getElementById('sendBtn').disabled = true;
+  const msgs = document.getElementById('messages');
+  const typingEl = document.createElement('div');
+  typingEl.className = 'typing-row';
+  typingEl.innerHTML = `<div class="msg-avatar" style="background:var(--accent-soft);border-color:var(--accent-mid)">⚡</div>
     <div class="typing"><span></span><span></span><span></span></div>`;
   msgs.appendChild(typingEl);
-  msgs.scrollTop=msgs.scrollHeight;
-  try{
-    const sys=getActiveSystem(currentAgent);
-    const hist=conversations[currentAgent].slice(0,-1);
-    const res=await fetch('/api/anthropic',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':API_KEY},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:2500,system:sys,messages:hist.concat([{role:'user',content:text}])})
+  msgs.scrollTop = msgs.scrollHeight;
+  try {
+    const hist = conversation.slice(0, -1);
+    const res = await fetch('/api/anthropic', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': 'PROXY_MANAGED' },
+      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2500, system: SYSTEM_PROMPT, messages: hist.concat([{ role: 'user', content: text }]) })
     });
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error?.message||'API error');
-    const reply=data.content.map(b=>b.text||'').join('');
-    conversations[currentAgent].push({role:'assistant',content:reply});
-    if(reply.startsWith('#')||(reply.length>350&&reply.includes('\n## '))){
-      livrables[currentAgent]=reply;
-      agentDone[currentAgent]=true;
-      const ck=document.getElementById('ck-'+currentAgent);
-      if(ck) ck.style.display='flex';
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || 'API error');
+    const reply = data.content.map(b => b.text || '').join('');
+    conversation.push({ role: 'assistant', content: reply });
+    if (reply.startsWith('#') || (reply.length > 350 && reply.includes('\n## '))) {
+      livrables.last = reply;
+      if (text.includes('create-product-brief')) livrables.brief = reply;
+      else if (text.includes('create-prd'))       livrables.prd = reply;
+      else if (text.includes('create-ux-design')) livrables.ux = reply;
+      else if (text.includes('create-architecture')) livrables.architecture = reply;
     }
-  }catch(e){
-    conversations[currentAgent].push({role:'assistant',content:`❌ Erreur : ${e.message}`});
+  } catch(e) {
+    conversation.push({ role: 'assistant', content: `❌ Erreur : ${e.message}` });
   }
   typingEl.remove();
-  isLoading=false;
-  document.getElementById('sendBtn').disabled=false;
+  isLoading = false;
+  document.getElementById('sendBtn').disabled = false;
   renderMessages();
   renderPanel();
 }
 
 // ── UTILS ─────────────────────────────────────────────────────────────
-function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');}
-function fmt(t){let s=esc(t);s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');s=s.replace(/\*(.+?)\*/g,'<em>$1</em>');return s;}
-
-// ── MODAL ─────────────────────────────────────────────────────────────
-function saveApiKey(){ /* key managed server-side */ }
+function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
+function fmt(t) { let s = esc(t); s = s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>'); s = s.replace(/\*(.+?)\*/g,'<em>$1</em>'); return s; }
 
 // ── EXPORTS ───────────────────────────────────────────────────────────
-function exportTxt(){
-  const c=livrables[currentAgent]; if(!c) return;
-  const a=document.createElement('a');
-  a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(c);
-  a.download=`BMAD_${AGENTS[currentAgent].name}_${new Date().toISOString().slice(0,10)}.txt`;
+function exportTxt() {
+  const c = livrables.last; if (!c) return;
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(c);
+  a.download = `BMAD_livrable_${new Date().toISOString().slice(0,10)}.txt`;
   a.click();
 }
-function exportPdf(){
-  const c=livrables[currentAgent]; if(!c) return;
-  const a=AGENTS[currentAgent];
-  const win=window.open('','_blank');
-  let body='';
-  c.split('\n').forEach(line=>{
-    if(line.startsWith('# '))body+=`<h1>${line.slice(2)}</h1>`;
-    else if(line.startsWith('## '))body+=`<h2>${line.slice(3)}</h2>`;
-    else if(line.startsWith('- '))body+=`<li>${line.slice(2)}</li>`;
-    else if(line.trim())body+=`<p>${line}</p>`;
+function exportPdf() {
+  const c = livrables.last; if (!c) return;
+  const win = window.open('', '_blank');
+  let body = '';
+  c.split('\n').forEach(line => {
+    if (line.startsWith('# '))      body += `<h1>${line.slice(2)}</h1>`;
+    else if (line.startsWith('## '))body += `<h2>${line.slice(3)}</h2>`;
+    else if (line.startsWith('- ')) body += `<li>${line.slice(2)}</li>`;
+    else if (line.trim())           body += `<p>${line}</p>`;
   });
-  const css='body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;color:#111;font-size:14px;line-height:1.6;}h1{font-size:20px;color:#E8430A;border-bottom:2px solid #E8430A;padding-bottom:6px;margin-bottom:14px;}h2{font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 6px;}p{margin:5px 0;color:#374151;}li{margin:3px 0;color:#374151;}@media print{body{margin:20px;}}';
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>'+a.name+' — Livrable</title><style>'+css+'</style></head><body>'+body+'</body></html>');
+  const css = 'body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;color:#111;font-size:14px;line-height:1.6;}h1{font-size:20px;color:#4F46E5;border-bottom:2px solid #4F46E5;padding-bottom:6px;margin-bottom:14px;}h2{font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 6px;}p{margin:5px 0;color:#374151;}li{margin:3px 0;color:#374151;}@media print{body{margin:20px;}}';
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>BMAD — Livrable</title><style>' + css + '</style></head><body>' + body + '</body></html>');
   win.document.close();
-  setTimeout(()=>win.print(),400);
+  setTimeout(() => win.print(), 400);
 }
-function copyLivrable(){const c=livrables[currentAgent];if(c)navigator.clipboard.writeText(c).catch(()=>{});}
-function clearLivrable(){livrables[currentAgent]='';renderPanel();}
-async function generateUxImage(){
-  if(currentAgent!=='sally'||!livrables.sally) return;
-  try{
-    const r=await fetch('/api/anthropic',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,messages:[{role:'user',content:'Génère UNIQUEMENT un schéma ASCII du parcours UX, sans texte avant ni après:'+livrables.sally}]})});
-    const d=await r.json();
-    const art=d.content.map(b=>b.text||'').join('');
-    const canvas=document.createElement('canvas');canvas.width=900;canvas.height=420;
-    const ctx=canvas.getContext('2d');
-    ctx.fillStyle='#F0F2F5';ctx.fillRect(0,0,900,420);
-    ctx.font='13px "Courier New",monospace';ctx.fillStyle='#111827';
-    art.split('\n').forEach((line,i)=>ctx.fillText(line,20,30+i*18));
-    canvas.toBlob(blob=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='ux-parcours.png';a.click();},'image/png');
-  }catch(e){alert('Erreur: '+e.message);}
-}
+function copyLivrable() { const c = livrables.last; if (c) navigator.clipboard.writeText(c).catch(() => {}); }
+function clearLivrable() { livrables.last = ''; renderPanel(); }
+function saveApiKey() { /* key managed server-side */ }
 
 // ── INIT ──────────────────────────────────────────────────────────────
-switchAgent('mary');
+renderCmds();
+renderMessages();
+renderPanel();
 </script>
 </body>
 </html>
