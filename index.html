@@ -199,7 +199,7 @@ body {
 /* ── LAYOUT ─────────────────────────────────────────────────────────── */
 .layout {
   display: grid;
-  grid-template-columns: 256px 1fr 300px;
+  grid-template-columns: 256px 1fr 380px;
   flex: 1;
   overflow: hidden;
   gap: 0;
@@ -608,6 +608,7 @@ body {
   font-family: 'Geist', sans-serif;
 }
 .panel-btn:hover { background: var(--border); color: var(--text); }
+.doc-meta .panel-btn { white-space: nowrap; padding: 4px 8px; }
 .panel-content { flex: 1; overflow-y: auto; padding: 16px; }
 .panel-content::-webkit-scrollbar { width: 3px; }
 .panel-content::-webkit-scrollbar-thumb { background: var(--border); }
@@ -628,6 +629,90 @@ body {
 .lv-p { font-size: 12px; color: var(--text2); line-height: 1.6; margin-bottom: 3px; }
 .lv-bullet { font-size: 12px; color: var(--text2); line-height: 1.5; padding-left: 12px; position: relative; margin-bottom: 2px; }
 .lv-bullet::before { content: "·"; position: absolute; left: 0; color: var(--text3); }
+
+.lv-h3 { font-size: 12px; font-weight: 600; color: var(--text); margin: 10px 0 4px; }
+.lv-pre {
+  font-family: 'Geist Mono', monospace; font-size: 10.5px; line-height: 1.45;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 8px 10px; margin: 6px 0;
+  overflow-x: auto; white-space: pre; color: var(--text);
+}
+
+/* Doc tabs */
+.doc-tabs {
+  display: flex; gap: 2px; padding: 8px 12px 0;
+  border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.doc-tab {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 9px; border: none; background: transparent;
+  font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 500;
+  color: var(--text3); cursor: pointer;
+  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  transition: color .1s;
+}
+.doc-tab:hover { color: var(--text2); }
+.doc-tab.active { color: var(--text); border-bottom-color: var(--tab-color, var(--accent)); }
+.doc-tab-count {
+  font-size: 10px; font-weight: 600; min-width: 16px; height: 16px;
+  padding: 0 4px; border-radius: 8px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--surface2); border: 1px solid var(--border); color: var(--text3);
+}
+.doc-tab.has-docs .doc-tab-count { background: var(--tab-soft, var(--accent-soft)); border-color: var(--tab-mid, var(--accent-mid)); color: var(--tab-color, var(--accent)); }
+.doc-meta {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-bottom: 1px solid var(--border);
+  font-size: 11px; color: var(--text3); flex-shrink: 0;
+}
+.doc-meta select {
+  font-family: 'Geist', sans-serif; font-size: 11px; color: var(--text2);
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 3px 6px; outline: none;
+}
+.doc-meta .spacer { flex: 1; }
+.panel-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.panel-btn.primary:hover { opacity: .88; background: var(--accent); color: #fff; }
+.panel-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Doc link in chat */
+.msg-doc-link {
+  align-self: flex-start; margin-top: 2px;
+  font-size: 11px; color: var(--accent); background: var(--accent-soft);
+  border: 1px solid var(--accent-mid); border-radius: 20px;
+  padding: 2px 9px; cursor: pointer; font-family: 'Geist', sans-serif;
+}
+.msg-doc-link:hover { opacity: .85; }
+
+/* Selection modal */
+.sel-list { display: flex; flex-direction: column; gap: 2px; max-height: 340px; overflow-y: auto; margin-bottom: 16px; }
+.sel-group-title { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .07em; margin: 10px 0 4px; }
+.sel-group-title:first-child { margin-top: 0; }
+.sel-item { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; }
+.sel-item:hover { background: var(--surface2); }
+.sel-item input { width: auto; margin: 0; }
+.sel-item-title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sel-item-date { font-size: 10px; color: var(--text3); flex-shrink: 0; }
+.sel-actions { display: flex; gap: 6px; }
+.sel-actions .modal-btn { flex: 1; }
+.modal-btn.ghost { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+.sel-quick { display: flex; gap: 10px; margin-bottom: 10px; font-size: 11px; }
+.sel-quick a { color: var(--accent); cursor: pointer; }
+
+/* Toast */
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--text); color: #fff; font-size: 12px; padding: 8px 14px;
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-md);
+  opacity: 0; pointer-events: none; transition: all .2s; z-index: 2000;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.tb-btn {
+  padding: 5px 10px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 20px; font-size: 11px; color: var(--text2); cursor: pointer;
+  font-family: 'Geist', sans-serif;
+}
+.tb-btn:hover { background: var(--border); color: var(--text); }
 </style>
 </head>
 <body>
@@ -641,6 +726,7 @@ body {
     <div class="logo-text">BMAD Studio</div>
   </div>
   <div class="tb-right">
+    <button class="tb-btn" onclick="resetSession()" title="Effacer la conversation et tous les documents">↺ Nouvelle session</button>
     <div class="model-badge"><div class="status-dot"></div>claude-sonnet-4</div>
   </div>
 </div>
@@ -688,23 +774,123 @@ body {
   <!-- PANEL -->
   <div class="panel">
     <div class="panel-header">
-      <div class="panel-title" id="panelTitle">Livrable</div>
+      <div class="panel-title" id="panelTitle">Documents</div>
       <div class="panel-actions">
-<button class="panel-btn" onclick="copyLivrable()">Copier</button>
-        <button class="panel-btn" onclick="exportTxt()">↓ TXT</button>
-        <button class="panel-btn" onclick="exportPdf()">↓ PDF</button>
-        <button class="panel-btn" onclick="clearLivrable()">✕</button>
+        <button class="panel-btn primary" onclick="openSelection()" title="Copier ou exporter un ou plusieurs documents en Markdown">☰ Sélection / Tout</button>
       </div>
     </div>
+    <div class="doc-tabs" id="docTabs"></div>
+    <div class="doc-meta" id="docMeta"></div>
     <div class="panel-content" id="panelContent"></div>
   </div>
 
 </div>
 
+<!-- SELECTION MODAL -->
+<div class="modal-overlay" id="selModal" style="display:none" onclick="if(event.target===this)closeSelection()">
+  <div class="modal" style="width:440px">
+    <h2>Copier / exporter des documents</h2>
+    <p style="margin-bottom:12px">Cochez un ou plusieurs documents de la session. Le résultat est au format Markdown.</p>
+    <div class="sel-quick">
+      <a onclick="selectDocs('latest')">Dernières versions</a>
+      <a onclick="selectDocs('all')">Tout</a>
+      <a onclick="selectDocs('none')">Aucun</a>
+    </div>
+    <div class="sel-list" id="selList"></div>
+    <div class="sel-actions">
+      <button class="modal-btn ghost" onclick="closeSelection()">Annuler</button>
+      <button class="modal-btn" onclick="copySelection()">Copier</button>
+      <button class="modal-btn" onclick="exportSelection()">↓ Export .md</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
 <script>
 let isLoading = false;
 let conversation = [];
-const livrables = { brief:'', prd:'', ux:'', architecture:'', last:'' };
+// Tous les documents générés pendant la session (toutes versions confondues)
+let docs = [];            // { id, type, title, content, createdAt }
+let activeCmd = '';       // dernière commande BMAD lancée (sert à typer le livrable)
+let activeTab = 'prd';
+let selectedVersion = {}; // type -> id de la version affichée
+
+const DOC_TYPES = [
+  { id:'brief',        label:'Brief',  full:'Product Brief',        cmd:'create-product-brief', color:'#2563EB', soft:'#EFF6FF', mid:'#BFDBFE', title:/^#\s*(product\s*)?brief/i },
+  { id:'prd',          label:'PRD',    full:'PRD',                  cmd:'create-prd',           color:'#7C3AED', soft:'#F5F3FF', mid:'#DDD6FE', title:/^#\s*(prd|product requirements)/i },
+  { id:'ux',           label:'UX',     full:'Design UX',            cmd:'create-ux-design',     color:'#059669', soft:'#ECFDF5', mid:'#A7F3D0', title:/^#\s*(design\s*ux|ux|parcours)/i },
+  { id:'architecture', label:'Archi',  full:'Architecture',         cmd:'create-architecture',  color:'#D97706', soft:'#FFFBEB', mid:'#FDE68A', title:/^#\s*architecture/i },
+  { id:'other',        label:'Autres', full:'Autres documents',     cmd:null,                   color:'#64748B', soft:'#F8FAFC', mid:'#CBD5E1', title:null },
+];
+const typeById = id => DOC_TYPES.find(t => t.id === id) || DOC_TYPES[DOC_TYPES.length-1];
+
+// ── PERSISTANCE ───────────────────────────────────────────────────────
+const STORE_KEY = 'bmad-studio-session-v1';
+function saveState() {
+  try { localStorage.setItem(STORE_KEY, JSON.stringify({ conversation, docs, activeCmd, activeTab })); } catch(e) {}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return;
+    const st = JSON.parse(raw);
+    conversation = Array.isArray(st.conversation) ? st.conversation : [];
+    docs = Array.isArray(st.docs) ? st.docs : [];
+    activeCmd = st.activeCmd || '';
+    activeTab = st.activeTab || activeTab;
+  } catch(e) {}
+}
+function resetSession() {
+  if ((conversation.length || docs.length) && !confirm('Effacer la conversation et tous les documents générés ?')) return;
+  conversation = []; docs = []; activeCmd = ''; selectedVersion = {}; activeTab = 'prd';
+  saveState(); renderMessages(); renderPanel();
+}
+
+// ── DÉTECTION DES LIVRABLES ───────────────────────────────────────────
+// Extrait le document markdown d'une réponse (tolère un court préambule avant le titre #)
+function extractDoc(reply) {
+  let start = -1;
+  if (/^#\s/.test(reply)) start = 0;
+  else { const m = reply.match(/\n#\s/); if (m) start = m.index + 1; }
+  if (start < 0) return null;
+  const content = reply.slice(start).trim();
+  if (!content.includes('\n## ') && content.length < 350) return null;
+  return content;
+}
+function detectType(content) {
+  const firstLine = content.split('\n')[0];
+  const byTitle = DOC_TYPES.find(t => t.title && t.title.test(firstLine));
+  if (byTitle) return byTitle.id;
+  const byCmd = DOC_TYPES.find(t => t.cmd && activeCmd.includes(t.cmd));
+  return byCmd ? byCmd.id : 'other';
+}
+function addDoc(content) {
+  const type = detectType(content);
+  const doc = {
+    id: 'd' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+    type,
+    title: content.split('\n')[0].replace(/^#+\s*/, '').trim() || typeById(type).full,
+    content,
+    createdAt: new Date().toISOString()
+  };
+  docs.push(doc);
+  activeTab = type;
+  selectedVersion[type] = doc.id;
+  return doc;
+}
+function docsOf(type) { return docs.filter(d => d.type === type); }
+function versionLabel(d) {
+  const list = docsOf(d.type);
+  const n = list.indexOf(d) + 1;
+  const t = new Date(d.createdAt);
+  return `v${n} · ${t.toLocaleDateString('fr-FR')} ${t.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}`;
+}
+function currentDoc() {
+  const list = docsOf(activeTab);
+  if (!list.length) return null;
+  return list.find(d => d.id === selectedVersion[activeTab]) || list[list.length-1];
+}
 
 // ── SYSTEM PROMPT UNIFIÉ ──────────────────────────────────────────────
 const SYSTEM_PROMPT = `Tu es BMAD Studio — un assistant produit expert en méthode agile AI-driven. Tu t'exprimes uniquement en français. Tu maîtrises tous les rôles du cycle produit.
@@ -873,7 +1059,7 @@ function renderMessages() {
   }
   msgs.innerHTML = '';
   conversation.forEach(m => {
-    msgs.appendChild(m.role === 'user' ? makeUserMsg(m.content) : makeAgentMsg(m.content));
+    msgs.appendChild(m.role === 'user' ? makeUserMsg(m.content) : makeAgentMsg(m.content, m.docId));
   });
   msgs.scrollTop = msgs.scrollHeight;
 }
@@ -886,31 +1072,79 @@ function makeUserMsg(text) {
   return d;
 }
 
-function makeAgentMsg(text) {
+function makeAgentMsg(text, docId) {
   const d = document.createElement('div');
   d.className = 'msg agent';
+  const doc = docId && docs.find(x => x.id === docId);
+  const link = doc ? `<button class="msg-doc-link" onclick="showDoc('${doc.id}')">📄 ${esc(typeById(doc.type).full)} · ${versionLabel(doc).split(' · ')[0]} — voir dans le panneau</button>` : '';
   d.innerHTML = `<div class="msg-avatar" style="background:var(--accent-soft);border-color:var(--accent-mid)">⚡</div>
-    <div class="msg-body"><div class="msg-name">BMAD Studio</div><div class="msg-text">${fmt(text)}</div></div>`;
+    <div class="msg-body"><div class="msg-name">BMAD Studio</div><div class="msg-text">${fmt(text)}</div>${link}</div>`;
   return d;
 }
 
 function renderPanel() {
+  // Onglets
+  document.getElementById('docTabs').innerHTML = DOC_TYPES.map(t => {
+    const n = docsOf(t.id).length;
+    return `<button class="doc-tab${t.id===activeTab?' active':''}${n?' has-docs':''}"
+      style="--tab-color:${t.color};--tab-soft:${t.soft};--tab-mid:${t.mid}"
+      onclick="switchTab('${t.id}')" title="${t.full}">${t.label}<span class="doc-tab-count">${n}</span></button>`;
+  }).join('');
+
+  const meta = document.getElementById('docMeta');
   const panel = document.getElementById('panelContent');
-  const content = livrables.last;
-  document.getElementById('panelTitle').textContent = 'Livrable';
-  if (!content) {
-    panel.innerHTML = '<div class="panel-empty"><div class="panel-empty-icon">📄</div><div class="panel-empty-title">Aucun livrable</div><div class="panel-empty-desc">Le livrable généré apparaîtra ici automatiquement.</div></div>';
+  const doc = currentDoc();
+  const t = typeById(activeTab);
+  if (!doc) {
+    meta.style.display = 'none';
+    panel.innerHTML = `<div class="panel-empty"><div class="panel-empty-icon">📄</div><div class="panel-empty-title">Aucun document ${esc(t.full)}</div><div class="panel-empty-desc">Les documents générés pendant la session apparaîtront ici automatiquement, rangés par type.</div></div>`;
     return;
   }
-  let html = '';
-  content.split('\n').forEach(line => {
-    if (line.startsWith('# '))        html += `<div class="lv-h1">${esc(line.slice(2))}</div>`;
-    else if (line.startsWith('## '))  html += `<div class="lv-h2">${esc(line.slice(3))}</div>`;
-    else if (line.startsWith('- ') || line.startsWith('• ')) html += `<div class="lv-bullet">${esc(line.slice(2))}</div>`;
-    else if (line.trim())             html += `<div class="lv-p">${esc(line)}</div>`;
+  const list = docsOf(activeTab);
+  const opts = list.map(d => `<option value="${d.id}"${d.id===doc.id?' selected':''}>${esc(versionLabel(d))}</option>`).reverse().join('');
+  meta.style.display = 'flex';
+  meta.innerHTML = `<select onchange="selectedVersion['${activeTab}']=this.value;renderPanel()" title="Versions">${opts}</select>
+    <span class="spacer"></span>
+    <button class="panel-btn" onclick="copyDoc()">Copier</button>
+    <button class="panel-btn" onclick="exportDocMd()">↓ MD</button>
+    <button class="panel-btn" onclick="exportPdf()">↓ PDF</button>
+    <button class="panel-btn" onclick="deleteDoc()" title="Supprimer cette version">✕</button>`;
+  panel.innerHTML = renderMd(doc.content);
+  panel.scrollTop = 0;
+}
+
+function switchTab(type) { activeTab = type; saveState(); renderPanel(); }
+function showDoc(id) {
+  const d = docs.find(x => x.id === id); if (!d) return;
+  activeTab = d.type; selectedVersion[d.type] = d.id; renderPanel();
+}
+
+function renderMd(content) {
+  let html = '', inCode = false, code = [];
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.trim().startsWith('```')) {
+      if (inCode) { html += `<pre class="lv-pre">${escRaw(code.join('\n'))}</pre>`; code = []; }
+      inCode = !inCode; continue;
+    }
+    if (inCode) { code.push(line); continue; }
+    if (line.trim().startsWith('|')) {
+      const tbl = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) tbl.push(lines[i++]);
+      i--;
+      html += `<pre class="lv-pre">${escRaw(tbl.join('\n'))}</pre>`;
+      continue;
+    }
+    if (line.startsWith('# '))        html += `<div class="lv-h1">${fmtInline(line.slice(2))}</div>`;
+    else if (line.startsWith('## '))  html += `<div class="lv-h2">${fmtInline(line.slice(3))}</div>`;
+    else if (/^#{3,}\s/.test(line))   html += `<div class="lv-h3">${fmtInline(line.replace(/^#+\s/,''))}</div>`;
+    else if (/^\s*[-•*]\s/.test(line)) html += `<div class="lv-bullet">${fmtInline(line.replace(/^\s*[-•*]\s/,''))}</div>`;
+    else if (line.trim())             html += `<div class="lv-p">${fmtInline(line)}</div>`;
     else html += '<div style="height:6px"></div>';
-  });
-  panel.innerHTML = html;
+  }
+  if (inCode && code.length) html += `<pre class="lv-pre">${escRaw(code.join('\n'))}</pre>`;
+  return html;
 }
 
 // ── INPUT ─────────────────────────────────────────────────────────────
@@ -932,7 +1166,9 @@ async function sendMessage() {
   if (!text || isLoading) return;
   inp.value = ''; inp.style.height = 'auto';
   document.getElementById('autocomplete').classList.remove('show');
+  if (text.startsWith('/bmad')) activeCmd = text.split(/\s/)[0];
   conversation.push({ role: 'user', content: text });
+  saveState();
   renderMessages();
   isLoading = true;
   document.getElementById('sendBtn').disabled = true;
@@ -944,7 +1180,7 @@ async function sendMessage() {
   msgs.appendChild(typingEl);
   msgs.scrollTop = msgs.scrollHeight;
   try {
-    const hist = conversation.slice(0, -1);
+    const hist = conversation.slice(0, -1).map(m => ({ role: m.role, content: m.content }));
     const res = await fetch('/api/anthropic', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': 'PROXY_MANAGED' },
@@ -953,56 +1189,132 @@ async function sendMessage() {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error?.message || 'API error');
     const reply = data.content.map(b => b.text || '').join('');
-    conversation.push({ role: 'assistant', content: reply });
-    if (reply.startsWith('#') || (reply.length > 350 && reply.includes('\n## '))) {
-      livrables.last = reply;
-      if (text.includes('create-product-brief')) livrables.brief = reply;
-      else if (text.includes('create-prd'))       livrables.prd = reply;
-      else if (text.includes('create-ux-design')) livrables.ux = reply;
-      else if (text.includes('create-architecture')) livrables.architecture = reply;
-    }
+    const msg = { role: 'assistant', content: reply };
+    const docContent = extractDoc(reply);
+    if (docContent) msg.docId = addDoc(docContent).id;
+    conversation.push(msg);
   } catch(e) {
     conversation.push({ role: 'assistant', content: `❌ Erreur : ${e.message}` });
   }
   typingEl.remove();
   isLoading = false;
   document.getElementById('sendBtn').disabled = false;
+  saveState();
   renderMessages();
   renderPanel();
 }
 
 // ── UTILS ─────────────────────────────────────────────────────────────
+function escRaw(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmtInline(t) { return escRaw(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code style="font-family:\'Geist Mono\',monospace;font-size:11px">$1</code>'); }
 function esc(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>'); }
 function fmt(t) { let s = esc(t); s = s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>'); s = s.replace(/\*(.+?)\*/g,'<em>$1</em>'); return s; }
 
-// ── EXPORTS ───────────────────────────────────────────────────────────
-function exportTxt() {
-  const c = livrables.last; if (!c) return;
+// ── COPIE & EXPORTS ───────────────────────────────────────────────────
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 1800);
+}
+async function copyText(text, okMsg) {
+  try { await navigator.clipboard.writeText(text); }
+  catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch(_) { ta.remove(); toast('Copie impossible'); return; }
+    ta.remove();
+  }
+  toast(okMsg);
+}
+function downloadMd(text, name) {
+  const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
   const a = document.createElement('a');
-  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(c);
-  a.download = `BMAD_livrable_${new Date().toISOString().slice(0,10)}.txt`;
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
   a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+const today = () => new Date().toISOString().slice(0,10);
+
+function copyDoc() { const d = currentDoc(); if (d) copyText(d.content, 'Document copié (Markdown)'); }
+function exportDocMd() { const d = currentDoc(); if (d) downloadMd(d.content, `BMAD_${d.type}_${today()}.md`); }
+function deleteDoc() {
+  const d = currentDoc(); if (!d) return;
+  if (!confirm(`Supprimer « ${d.title} » (${versionLabel(d)}) ?`)) return;
+  docs = docs.filter(x => x.id !== d.id);
+  delete selectedVersion[d.type];
+  conversation.forEach(m => { if (m.docId === d.id) delete m.docId; });
+  saveState(); renderMessages(); renderPanel();
 }
 function exportPdf() {
-  const c = livrables.last; if (!c) return;
+  const d = currentDoc(); if (!d) return;
   const win = window.open('', '_blank');
-  let body = '';
-  c.split('\n').forEach(line => {
-    if (line.startsWith('# '))      body += `<h1>${line.slice(2)}</h1>`;
-    else if (line.startsWith('## '))body += `<h2>${line.slice(3)}</h2>`;
-    else if (line.startsWith('- ')) body += `<li>${line.slice(2)}</li>`;
-    else if (line.trim())           body += `<p>${line}</p>`;
+  let body = '', inCode = false, code = [];
+  d.content.split('\n').forEach(line => {
+    if (line.trim().startsWith('```')) { if (inCode) { body += `<pre>${escRaw(code.join('\n'))}</pre>`; code = []; } inCode = !inCode; return; }
+    if (inCode) { code.push(line); return; }
+    if (line.startsWith('# '))       body += `<h1>${fmtInline(line.slice(2))}</h1>`;
+    else if (line.startsWith('## ')) body += `<h2>${fmtInline(line.slice(3))}</h2>`;
+    else if (/^#{3,}\s/.test(line))  body += `<h3>${fmtInline(line.replace(/^#+\s/,''))}</h3>`;
+    else if (/^\s*[-•*]\s/.test(line)) body += `<li>${fmtInline(line.replace(/^\s*[-•*]\s/,''))}</li>`;
+    else if (line.trim().startsWith('|')) body += `<pre class="t">${escRaw(line)}</pre>`;
+    else if (line.trim())            body += `<p>${fmtInline(line)}</p>`;
   });
-  const css = 'body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;color:#111;font-size:14px;line-height:1.6;}h1{font-size:20px;color:#4F46E5;border-bottom:2px solid #4F46E5;padding-bottom:6px;margin-bottom:14px;}h2{font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 6px;}p{margin:5px 0;color:#374151;}li{margin:3px 0;color:#374151;}@media print{body{margin:20px;}}';
-  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>BMAD — Livrable</title><style>' + css + '</style></head><body>' + body + '</body></html>');
+  const css = 'body{font-family:system-ui,sans-serif;max-width:800px;margin:40px auto;color:#111;font-size:14px;line-height:1.6;}h1{font-size:20px;color:#4F46E5;border-bottom:2px solid #4F46E5;padding-bottom:6px;margin-bottom:14px;}h2{font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:.06em;margin:16px 0 6px;}h3{font-size:14px;margin:12px 0 4px;}p{margin:5px 0;color:#374151;}li{margin:3px 0;color:#374151;}pre{font-size:11px;background:#F8F9FB;padding:8px;border-radius:4px;overflow:auto;}pre.t{margin:0;padding:0 8px;border-radius:0;}@media print{body{margin:20px;}}';
+  win.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>BMAD — ' + escRaw(d.title) + '</title><style>' + css + '</style></head><body>' + body + '</body></html>');
   win.document.close();
   setTimeout(() => win.print(), 400);
 }
-function copyLivrable() { const c = livrables.last; if (c) navigator.clipboard.writeText(c).catch(() => {}); }
-function clearLivrable() { livrables.last = ''; renderPanel(); }
+
+// Sélection multiple
+function openSelection() {
+  if (!docs.length) { toast('Aucun document généré pour le moment'); return; }
+  let h = '';
+  DOC_TYPES.forEach(t => {
+    const list = docsOf(t.id);
+    if (!list.length) return;
+    h += `<div class="sel-group-title">${esc(t.full)}</div>`;
+    list.slice().reverse().forEach(d => {
+      h += `<label class="sel-item"><input type="checkbox" value="${d.id}">
+        <span class="sel-item-title">${esc(d.title)}</span>
+        <span class="sel-item-date">${esc(versionLabel(d))}</span></label>`;
+    });
+  });
+  document.getElementById('selList').innerHTML = h;
+  selectDocs('latest');
+  document.getElementById('selModal').style.display = 'flex';
+}
+function closeSelection() { document.getElementById('selModal').style.display = 'none'; }
+function selectDocs(mode) {
+  const latest = new Set(DOC_TYPES.map(t => { const l = docsOf(t.id); return t.id === 'other' ? null : l.length ? l[l.length-1].id : null; }));
+  docsOf('other').forEach(d => latest.add(d.id));
+  document.querySelectorAll('#selList input').forEach(cb => {
+    cb.checked = mode === 'all' ? true : mode === 'none' ? false : latest.has(cb.value);
+  });
+}
+function selectedMarkdown() {
+  const ids = [...document.querySelectorAll('#selList input:checked')].map(cb => cb.value);
+  // ordre du cycle BMAD : Brief → PRD → UX → Archi → Autres
+  const order = DOC_TYPES.map(t => t.id);
+  const chosen = docs.filter(d => ids.includes(d.id))
+    .sort((a,b) => order.indexOf(a.type) - order.indexOf(b.type) || a.createdAt.localeCompare(b.createdAt));
+  return chosen.map(d => d.content).join('\n\n---\n\n');
+}
+function copySelection() {
+  const md = selectedMarkdown();
+  if (!md) { toast('Sélectionnez au moins un document'); return; }
+  copyText(md, 'Sélection copiée (Markdown)'); closeSelection();
+}
+function exportSelection() {
+  const md = selectedMarkdown();
+  if (!md) { toast('Sélectionnez au moins un document'); return; }
+  downloadMd(md, `BMAD_documents_${today()}.md`); closeSelection();
+}
 function saveApiKey() { /* key managed server-side */ }
 
 // ── INIT ──────────────────────────────────────────────────────────────
+loadState();
 renderCmds();
 renderMessages();
 renderPanel();
